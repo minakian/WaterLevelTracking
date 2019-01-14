@@ -50,8 +50,15 @@ def readWaterCalibration(serial_port):
   time.sleep(0.1)
   response = s.read(s.in_waiting)
   response = response.decode('utf-8')[6:]
+  cmd = "GWTL\r"
+  s.write(bytes(cmd,"utf-8"))
+  time.sleep(0.1)
+  response2 = s.read(s.in_waiting)
+  response2 = response2.decode('utf-8')[8:-2]
+#  response2 = response2[:-2]
+  response2 += ',' + response
   s.close()
-  return response
+  return response2
 
 def writeDataToFile(data):
   with open('test.csv', 'a') as f:
