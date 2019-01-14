@@ -23,7 +23,7 @@ def serial_ports():
 
   result = []
   for port in ports:
-    #try:
+    try:
       s = serial.Serial(port, baudrate=115200)
       cmd = "GFWV\r"
       s.write(bytes(cmd,"utf-8"))
@@ -37,7 +37,9 @@ def serial_ports():
         print('No Port')
         return port
       except:
-        print("Invalid")
+        print("Invalid Data")
+    except:
+        print("invalid port")
 #      result.append(port)
       
 
