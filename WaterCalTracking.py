@@ -3,8 +3,10 @@ import glob
 import serial
 import time
 import csv
+import argparse
 from datetime import datetime
 
+flag_print = 0
 
 def serial_ports():
   """ Opens a port with the H1 Humidifier
@@ -60,6 +62,8 @@ def readWaterCalibration(serial_port):
 #  response2 = response2[:-2]
   response2 += ',' + response
   s.close()
+  if flag_print:
+    print(response2)
   return response2
 
 def writeDataToFile(data):
@@ -73,8 +77,22 @@ def trackWaterCalibration(serial_port):
   data = readWaterCalibration(serial_port)
   writeDataToFile(data)
 
+def parseArguments():
+  parser = argparse.ArgumentParser(
+    description='This application reads the water level and calibration from a Habitat H1 humidifier, then stores the information as a time series to a .csv file named "test.csv"',
+  )
+  parser.add_argument('--print', '-p', action="store_true", default=False, 
+                      help="If included, prints the data read from the device")
+  parser.add_argument('--sleep', '-s', action="store", dest="sleep_time", default=60, type=int,
+                      help="The time in seconds between readings, default=60")
+
+  result = parser.parse_args()
+
+  return result.print, result.sleep_time
+
 if __name__ == '__main__':
+  flag_print, sleep_time = parseArguments()
   s = serial_ports()
   while(1):
     trackWaterCalibration(s)
-    time.sleep(60)
+    time.sleep(sleep_time)

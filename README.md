@@ -2,6 +2,10 @@
 
 Requires PySerial to be installed
 
+Arguments:
+* -p, --print option to print the read data to the commandline
+* -s, --sleep	time in seconds to sleep between readings, default=60
+
 Operatiom:
 1. Detects the correct port for connecting
 2. Opens the appropriate port
